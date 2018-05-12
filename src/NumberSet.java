@@ -8,26 +8,33 @@ public class NumberSet {
     private int size;
 
     public void add(int i) {
-        if(size == nSet.length) throw new ArrayIndexOutOfBoundsException("Array is too big.");
+        if(size > MAX_SIZE) throw new ArrayIndexOutOfBoundsException("Array is too big.");
         nSet[size++] = i;
     }
 
     public void remove(int i) {
-        if(contains(i) == false) throw new IllegalArgumentException("No such element.");
+        if (contains(i) == false) throw new IllegalArgumentException("No such element.");
+
+        long numberOfOccurences = Arrays.stream(nSet)
+                .filter(x -> x == i)
+                .count();
+
         nSet = Arrays.stream(nSet)
                 .filter(a -> a != i)
                 .toArray();
+
+        size -= numberOfOccurences;
     }
 
     public int getRandomValue() {
-        if(nSet.length == 0) throw new IllegalStateException("Array is empty.");
+        if(size == 0) throw new IllegalStateException("Array is empty.");
         int pickedValue = nSet[new Random().nextInt(size)];
         remove(pickedValue);
         return pickedValue;
     }
 
     public int getSumOfElements() {
-        if(nSet.length == 0) throw new IllegalStateException("Array is empty.");
+        if(size == 0) throw new IllegalStateException("Array is empty.");
         return Arrays.stream(nSet).sum();
     }
 
@@ -44,7 +51,7 @@ public class NumberSet {
     }
 
     public int getSize() {
-        return nSet.length;
+        return size;
     }
 
     public static void main(String[] args) {
